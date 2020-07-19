@@ -1,0 +1,13 @@
+spark:
+  app:
+    name: Spark-kafka-Analyzer
+  master: local[*]
+  dbIpType: spark.mongodb.output.uri
+  dbIp: mongodb://127.0.0.1/rsvpDB.test1
+  caseSensitive: false
+
+kafka:
+  topic: test123
+
+server:
+  port: 8082

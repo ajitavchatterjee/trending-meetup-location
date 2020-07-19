@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple markers</title>
+    <style>
+            /* Always set the map height explicitly to define the size of the div
+           * element that contains the map. */
+            #map {
+                height: 100%;
+            }
+
+            /* Optional: Makes the sample page fill the window. */
+            html,
+            body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+</head>
+
+<body>
+<div id="map"></div>
+<div id="result"></div>
+
+<script>
+            if (typeof (EventSource) !== "undefined") {
+                var heatMapData = [];
+                var source = new EventSource("/meetupRsvps",
+                        {headers: "Content-Type: text/event-stream"});
+                source.onmessage = function (event) {
+
+                    var data = JSON.parse(event.data);
+                    addHeatMap(data.venueFrequencyKey.lat,data.venueFrequencyKey.lon, data.count);
+                };
+            } else {
+                document.getElementById("result").innerHTML =
+                        "Sorry, your browser does not support server-sent events...";
+            }
+
+            function addHeatMap(latv, lngv, weight) {
+            heatMapData.push({location: (new google.maps.LatLng(parseFloat(latv), parseFloat(lngv))), weight: parseFloat(weight)});
+<!--            console.log(heatMapData);-->
+                var heatmap = new google.maps.visualization.HeatmapLayer({
+                    data: heatMapData
+                });
+                heatmap.setMap(map);
+            }
+
+            function initMap() {
+                var myLatLng = {lat: parseFloat(0.0), lng: parseFloat(0.0)};
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 3,
+                    center: myLatLng
+                });
+            }
+
+        </script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5cVkzIwIYemdHsR0ZLCAf8_ffM0XN_z4&libraries=visualization&sensor=false&callback=initMap">
+</script>
+
+</body>
+</html>
