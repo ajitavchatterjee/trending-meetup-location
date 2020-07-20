@@ -1,6 +1,8 @@
 package com.solution.meetupreactiveservice.config;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.config.AbstractReactiveCassandraConfiguration;
 import org.springframework.data.cassandra.config.SchemaAction;
@@ -14,35 +16,23 @@ import java.util.List;
 
 @Configuration
 @EnableReactiveCassandraRepositories
+@EnableConfigurationProperties(CassandraPropertiesConfig.class)
+@AllArgsConstructor
 public class ReactiveCassandraConfig extends AbstractReactiveCassandraConfiguration {
 
-    @Value("${cassandra.keySpaceName}")
-    private String keySpaceName;
-
-    @Value("${cassandra.port}")
-    private int port;
-
-    @Value("${cassandra.contactPoints}")
-    private String contactPoints;
-
-    @Value("${cassandra.basePackages}")
-    private String basePackages;
-
-    @Value("${cassandra.localDataCenter}")
-    private String dataCenter;
-
+    private final CassandraPropertiesConfig cassandraPropertiesConfig;
 
     @Override
     protected String getKeyspaceName() {
-        return keySpaceName;
+        return cassandraPropertiesConfig.getKeyspaceName();
     }
 
     @Override protected String getContactPoints() {
-        return contactPoints;
+        return cassandraPropertiesConfig.getContactPoints();
     }
 
     @Override protected int getPort() {
-        return port;
+        return cassandraPropertiesConfig.getPort();
     }
 
     @Override public SchemaAction getSchemaAction() {
@@ -51,27 +41,22 @@ public class ReactiveCassandraConfig extends AbstractReactiveCassandraConfigurat
 
     @Override
     public String[] getEntityBasePackages() {
-        return new String[] {basePackages};
+        return new String[] {cassandraPropertiesConfig.getBasePackages()};
     }
 
     @Override
     protected String getLocalDataCenter() {
-        return dataCenter;
+        return cassandraPropertiesConfig.getLocalDataCenter();
     }
 
     @Override
     protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
         final CreateKeyspaceSpecification specification =
-                CreateKeyspaceSpecification.createKeyspace(keySpaceName)
+                CreateKeyspaceSpecification.createKeyspace(cassandraPropertiesConfig.getKeyspaceName())
                         .ifNotExists()
                         .with(KeyspaceOption.DURABLE_WRITES, true)
                         .withSimpleReplication();
         return Collections.singletonList(specification);
-    }
-
-    @Override
-    protected List<DropKeyspaceSpecification> getKeyspaceDrops() {
-        return Collections.singletonList(DropKeyspaceSpecification.dropKeyspace(keySpaceName));
     }
 
 }

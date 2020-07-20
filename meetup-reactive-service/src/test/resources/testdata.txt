@@ -1,0 +1,35 @@
+CREATE KEYSPACE rsvp_test
+WITH REPLICATION = {
+    'class' : 'SimpleStrategy',
+    'replication_factor' : 1
+};
+
+CREATE TABLE meetupfrequenncy_test (
+venue_id int,
+venue_name text,
+lat double,
+lon double,
+count counter,
+PRIMARY KEY ((venue_id, venue_name), lat, lon)
+);
+
+update meetupfrequenncy_test set count = count + 1
+where venue_id =1 and venue_name= 'London' and lat = 45.78 and lon = 34.12;
+
+update meetupfrequenncy_test set count = count + 6
+where venue_id =2 and venue_name= 'Germany' and lat = 89.76 and lon = 67.45;
+
+update meetupfrequenncy_test set count = count + 4
+where venue_id =3 and venue_name= 'Brisbane' and lat = 45.78 and lon = 90.70;
+
+update meetupfrequenncy_test set count = count + 5
+where venue_id =4 and venue_name= 'Dubai' and lat = 45.78 and lon = 90.45;
+
+update meetupfrequenncy_test set count = count + 5
+where venue_id =5 and venue_name= 'France' and lat = 45.78 and lon = 90.51;
+
+update meetupfrequenncy_test set count = count + 7
+where venue_id =6 and venue_name= 'India' and lat = 24.07 and lon = 48.12;
+
+update meetupfrequenncy_test set count = count + 2
+where venue_id =7 and venue_name= 'Italy' and lat = 69.04 and lon = 50.84;

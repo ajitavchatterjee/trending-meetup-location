@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
-@EnableConfigurationProperties(SparkPropertiesConfig.class)
 @AllArgsConstructor
 public class SparkConfig {
 
@@ -36,10 +35,5 @@ public class SparkConfig {
     @Bean
     public JavaStreamingContext createJavaStreamingContext() {
         return new JavaStreamingContext(conf(), Durations.seconds(1));
-    }
-
-    @Bean
-    public SparkSession createSparkSession() {
-        return SparkSession.builder().config(conf()).getOrCreate();
     }
 }

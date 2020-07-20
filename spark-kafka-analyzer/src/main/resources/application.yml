@@ -10,5 +10,9 @@ spark:
 kafka:
   topic: test123
 
+cassandra:
+  keyspace-name: rsvp
+  table-name: datacenter1
+
 server:
   port: 8082

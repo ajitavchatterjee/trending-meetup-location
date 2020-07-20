@@ -3,6 +3,7 @@ package com.solution.sparkkafkaanalyzer.consumer;
 import static com.datastax.spark.connector.japi.CassandraJavaUtil.javaFunctions;
 import static com.datastax.spark.connector.japi.CassandraJavaUtil.mapToRow;
 
+import com.solution.sparkkafkaanalyzer.config.CassandraPropertiesConfig;
 import com.solution.sparkkafkaanalyzer.deserializer.CustomMeetupRSVPDeserializer;
 import com.solution.sparkkafkaanalyzer.model.MeetupRSVP;
 import com.solution.sparkkafkaanalyzer.model.Venue;
@@ -22,7 +23,6 @@ import org.springframework.stereotype.Service;
 import scala.Tuple2;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,16 +32,16 @@ public class KafkaSparkMeetUpConsumer {
     @Value("${kafka.topic}")
     private String topic;
 
-    private final JavaStreamingContext context;
+    private final CassandraPropertiesConfig cassandraPropertiesConfig;
 
-    private final SparkSession session;
+    private final JavaStreamingContext context;
 
     private final MeetupOffsetCommitCallback commitCallback;
 
     @Autowired
-    public KafkaSparkMeetUpConsumer(JavaStreamingContext context, SparkSession session, MeetupOffsetCommitCallback commitCallback) {
+    public KafkaSparkMeetUpConsumer(CassandraPropertiesConfig cassandraPropertiesConfig, JavaStreamingContext context, MeetupOffsetCommitCallback commitCallback) {
+        this.cassandraPropertiesConfig = cassandraPropertiesConfig;
         this.context = context;
-        this.session = session;
         this.commitCallback = commitCallback;
     }
 
@@ -49,15 +49,7 @@ public class KafkaSparkMeetUpConsumer {
         final JavaInputDStream<ConsumerRecord<String, MeetupRSVP>> meetupStream = createStream();
         final JavaDStream<MeetupRSVP> meetupStreamValues = meetupStream.map(ConsumerRecord::value);
 
-        JavaDStream<Venue> venues = meetupStreamValues.map(MeetupRSVP::getVenue).filter(Objects::nonNull);
-        JavaPairDStream<Venue, Integer> venueCountPair = venues.mapToPair(venue -> new Tuple2<>(venue, 1))
-            .reduceByKey(Integer::sum);
-        venueCountPair.foreachRDD(javaRdd -> {
-            Map<Venue, Integer> venueCountMap = javaRdd.collectAsMap();
-            List<VenueFrequency> venueFrequencyList = venueCountMap.entrySet().stream()
-                .map(this::buildVenueFrequency).collect(Collectors.toList());
-            saveRDDtoDatabase(venueFrequencyList);
-        });
+        calculateVenueFrequency(meetupStreamValues);
         // some time later, after outputs have completed
         commitOffsetToKafkaTopic(meetupStream);
         context.start();
@@ -88,6 +80,18 @@ public class KafkaSparkMeetUpConsumer {
         return Collections.unmodifiableMap(kafkaParams);
     }
 
+    private void calculateVenueFrequency(JavaDStream<MeetupRSVP> meetupStreamValues) {
+        JavaDStream<Venue> venues = meetupStreamValues.map(MeetupRSVP::getVenue).filter(Objects::nonNull);
+        JavaPairDStream<Venue, Integer> venueCountPair = venues.mapToPair(venue -> new Tuple2<>(venue, 1))
+                .reduceByKey(Integer::sum);
+        venueCountPair.foreachRDD(javaRdd -> {
+            Map<Venue, Integer> venueCountMap = javaRdd.collectAsMap();
+            List<VenueFrequency> venueFrequencyList = venueCountMap.entrySet().stream()
+                    .map(this::buildVenueFrequency).collect(Collectors.toList());
+            saveRDDtoDatabase(venueFrequencyList);
+        });
+    }
+
     private VenueFrequency buildVenueFrequency(Map.Entry<Venue, Integer> entry) {
         return VenueFrequency.builder()
             .venue_id(entry.getKey().getVenue_id())
@@ -100,9 +104,11 @@ public class KafkaSparkMeetUpConsumer {
 
     private void saveRDDtoDatabase(List<VenueFrequency> venueFrequencyList) {
         JavaRDD<VenueFrequency> rdd = context.sparkContext()
-                .parallelize(venueFrequencyList);
-        javaFunctions(rdd).writerBuilder("rsvp", "meetupfrequenncy", mapToRow(VenueFrequency.class))
-                .saveToCassandra();
+            .parallelize(venueFrequencyList);
+        javaFunctions(rdd).writerBuilder(
+            cassandraPropertiesConfig.getKeyspaceName(),
+            cassandraPropertiesConfig.getTableName(),
+            mapToRow(VenueFrequency.class)).saveToCassandra();
     }
 
     private void commitOffsetToKafkaTopic(JavaInputDStream<ConsumerRecord<String, MeetupRSVP>> meetupStream) {

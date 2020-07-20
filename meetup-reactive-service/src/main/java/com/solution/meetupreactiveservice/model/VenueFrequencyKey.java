@@ -1,5 +1,6 @@
 package com.solution.meetupreactiveservice.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyClass;
@@ -9,6 +10,7 @@ import java.io.Serializable;
 
 @PrimaryKeyClass
 @Data
+@AllArgsConstructor
 public class VenueFrequencyKey implements Serializable {
     @PrimaryKeyColumn(name = "venue_id", type = PrimaryKeyType.PARTITIONED)
     private int venue_id;

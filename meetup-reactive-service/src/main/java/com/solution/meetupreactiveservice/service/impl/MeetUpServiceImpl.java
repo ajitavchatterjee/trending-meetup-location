@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
-import java.time.Duration;
-
 @Service
 @AllArgsConstructor
 public class MeetUpServiceImpl implements MeetUpService {
@@ -16,9 +14,6 @@ public class MeetUpServiceImpl implements MeetUpService {
 
     @Override
     public Flux<VenueFrequency> popularVenueMeetups() {
-        System.out.println("====================FLUX START==============================");
-        meetUpRepository.findAll().collectList().doOnNext(u -> System.out.println("listUsers1 received " + u));
-        System.out.println("====================FLUX END==============================");
         return meetUpRepository.findAll();
     }
 }

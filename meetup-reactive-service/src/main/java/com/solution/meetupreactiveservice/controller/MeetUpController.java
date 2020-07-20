@@ -15,7 +15,6 @@ import java.util.Timer;
 @RestController
 @AllArgsConstructor
 public class MeetUpController {
-
     private final MeetUpService service;
 
     @CrossOrigin(origins = "http://localhost:4200")
@@ -24,10 +23,4 @@ public class MeetUpController {
         return service.popularVenueMeetups();
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping(value = "/test", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<Long> test() {
-
-        return Flux.interval(Duration.ofMillis(100));
-    }
 }
