@@ -16,8 +16,6 @@ public class MeetupOffsetCommitCallback implements OffsetCommitCallback {
 
     @Override
     public void onComplete(Map<TopicPartition, OffsetAndMetadata> map, Exception e) {
-//        logger.info("---------------------------------------------------");
-//        logger.log(Level.INFO, "{0} | {1}", new Object[] { offsets, exception });
-//        logger.info("---------------------------------------------------");
+        logger.debug("Offset:: {} and  Exception {}", map, e );
     }
 }

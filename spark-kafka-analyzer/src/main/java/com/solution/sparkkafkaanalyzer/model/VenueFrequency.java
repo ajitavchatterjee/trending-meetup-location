@@ -1,7 +1,5 @@
 package com.solution.sparkkafkaanalyzer.model;
 
-//CREATE TABLE meetupfrequenncy (venue_id int PRIMARY KEY, venue_name text, lat double, long double, count int);
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

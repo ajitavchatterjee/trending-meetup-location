@@ -1,10 +1,11 @@
 spark:
-  app:
-    name: Spark-kafka-Analyzer
+  app-name: Spark-kafka-Analyzer
   master: local[*]
-  dbIpType: spark.mongodb.output.uri
-  dbIp: mongodb://127.0.0.1/rsvpDB.test1
-  caseSensitive: false
+  db-ip-type: spark.cassandra.connection.host
+  db-ip: 127.0.0.1
+  case-sensitive: false
+  port-type: spark.cassandra.connection.port
+  port: 9042
 
 kafka:
   topic: test123
