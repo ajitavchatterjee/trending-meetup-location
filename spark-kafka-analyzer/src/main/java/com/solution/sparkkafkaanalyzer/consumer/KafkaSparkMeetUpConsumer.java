@@ -70,7 +70,7 @@ public class KafkaSparkMeetUpConsumer {
 
     private Map<String, Object> initializeKafkaParameters() {
         Map<String, Object> kafkaParams = new HashMap<>();
-        kafkaParams.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaPropertiesConfig.getBootstrapServers());
+        kafkaParams.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaPropertiesConfig.getBootstrapServer());
         kafkaParams.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         kafkaParams.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, CustomMeetupRSVPDeserializer.class);
         kafkaParams.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaPropertiesConfig.getGroupId());
