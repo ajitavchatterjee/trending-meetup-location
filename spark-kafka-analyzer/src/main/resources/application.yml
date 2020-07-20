@@ -9,6 +9,9 @@ spark:
 
 kafka:
   topic: test123
+  bootstrap-servers: localhost:9092
+  group-id: meetupGroup
+  auto-offset-reset: latest
 
 cassandra:
   keyspace-name: rsvp
