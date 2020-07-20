@@ -1,20 +1,20 @@
 package com.solution.collectionkafka.config;
 
 import com.solution.collectionkafka.producer.KafkaMeetUpProducer;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class SendMeetUpMessage {
+@AllArgsConstructor
+public class SendMeetUpToKafkaConfig {
 
-    @Autowired
-    private KafkaMeetUpProducer kafkaMeetUpProducer;
+    private final KafkaMeetUpProducer kafkaMeetUpProducer;
 
     @Bean
     public ApplicationRunner loadMessage(){
-        return args ->{kafkaMeetUpProducer.readMeetupJson();};
+        return args -> kafkaMeetUpProducer.readRSVPMeetupJson();
     }
 
 }

@@ -29,7 +29,7 @@ export class AppComponent implements OnDestroy {
       data: this.coords
   });
 
-  this.sseService.getData( this.onMessageSuccess.bind(this), () => {
+  this.sseService.getMeetUpData( this.onMessageSuccess.bind(this), () => {
     //handle the error here
   })
 

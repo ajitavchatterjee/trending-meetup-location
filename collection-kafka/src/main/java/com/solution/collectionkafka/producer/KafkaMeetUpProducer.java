@@ -1,7 +1,12 @@
 package com.solution.collectionkafka.producer;
 
+import com.solution.collectionkafka.config.ConnectionConfig;
+import com.solution.collectionkafka.utils.LoggerMessageUtils;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.messaging.support.MessageBuilder;
@@ -12,52 +17,65 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 
 @Component
 @EnableBinding(Source.class)
 public class KafkaMeetUpProducer {
-
-    private static final Logger logger = LoggerFactory.getLogger(KafkaMeetUpProducer.class);
-    private static final int SENDING_MESSAGE_TIMEOUT_MS = 10000;
-
+    private final ConnectionConfig connectionConfig;
+    @Getter
     private final Source source;
+    private static final Logger logger = LoggerFactory.getLogger(KafkaMeetUpProducer.class);
 
-    public KafkaMeetUpProducer(Source source) {
+    @Value("${kafka.timeout}")
+    private int sendMessageTimeout;
+
+    @Autowired
+    public KafkaMeetUpProducer(ConnectionConfig connectionConfig, Source source) {
+        this.connectionConfig = connectionConfig;
         this.source = source;
     }
 
-    public void readMeetupJson(){
-
+    public void readRSVPMeetupJson() {
         HttpURLConnection con = null;
-        try {
-            URL url = new URL("https://stream.meetup.com/2/rsvps");
-
+        try{
+            URL url = new URL(connectionConfig.getUrl());
             con = (HttpURLConnection) url.openConnection();
-            con.setConnectTimeout(5000);
-            con.setReadTimeout(50000);
+            con.setConnectTimeout(connectionConfig.getTimeout());
+            con.setReadTimeout(connectionConfig.getReadTimeout());
             con.setRequestMethod("GET");
-            logger.debug("Status is " + con.getResponseCode());
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                logger.debug("Incoming json "+inputLine);
-                source.output()
-                    .send(MessageBuilder.withPayload(inputLine).build(),
-                        SENDING_MESSAGE_TIMEOUT_MS) ;
-            }
-            in.close();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
+            logger.debug(LoggerMessageUtils.CONNECTION_SUCCESS_STATUS_MSG, con.getResponseCode());
+            readInputStream(con);
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            logger.error(LoggerMessageUtils.ERROR_INCORRECT_URL_MSG, connectionConfig.getUrl());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(LoggerMessageUtils.CONNECTION_FAILURE_MSG, connectionConfig.getUrl());
         } finally {
-            if(con!= null)
+            if (con != null)
                 con.disconnect();
         }
+    }
+
+    private void readInputStream(HttpURLConnection con) {
+        try {
+            BufferedReader in;
+            String inputLine;
+            in = new BufferedReader(
+                    new InputStreamReader(con.getInputStream()));
+            while ((inputLine = in.readLine()) != null) {
+                logger.debug(LoggerMessageUtils.INCOMING_JSON_MSG, inputLine);
+                sendToKafkaTopic(inputLine);
+            }
+            in.close();
+        } catch (IOException e) {
+            logger.error(LoggerMessageUtils.INPUT_STREAM_ERROR_MSG);
+        }
+
+    }
+
+    private void sendToKafkaTopic(String inputLine) {
+        source.output()
+            .send(MessageBuilder.withPayload(inputLine).build(), sendMessageTimeout);
+        logger.debug("Message : {} sent successfully to kafka", inputLine);
     }
 }
