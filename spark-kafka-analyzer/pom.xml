@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.solution</groupId>
 	<artifactId>spark-kafka-analyzer</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>spark-kafka-analyzer</name>
 	<description>Collects data from Kafka, process it using Spark and saves it to database</description>
 

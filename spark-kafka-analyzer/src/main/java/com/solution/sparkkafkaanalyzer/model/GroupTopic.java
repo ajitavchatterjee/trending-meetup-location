@@ -1,13 +1,18 @@
 package com.solution.sparkkafkaanalyzer.model;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Instantiates a new group topic.
  */
-@Data
+@Getter
+@Setter
 public class GroupTopic {
-    
-    private String urlkey;
-    private String topic_name;
+    @JsonProperty("urlkey")
+    private String urlKey;
+
+    @JsonProperty("topic_name")
+    private String topicName;
 }

@@ -1,17 +1,26 @@
 package com.solution.sparkkafkaanalyzer.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Instantiates a new member.
  */
-@Data
+@Getter
+@Setter
 public class Member {
-    
-    private Integer member_id;
+    @JsonProperty("member_id")
+    private Integer memberId;
+
+    @JsonProperty("photo")
     private String photo;
-    private String member_name;
+
+    @JsonProperty("member_name")
+    private String memberName;
+
+    @JsonProperty("other_services")
     @JsonIgnore
-    private String other_services;
+    private String otherServices;
 }

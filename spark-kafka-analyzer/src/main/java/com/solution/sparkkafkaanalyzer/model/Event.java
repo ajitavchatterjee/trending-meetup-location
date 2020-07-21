@@ -1,14 +1,24 @@
 package com.solution.sparkkafkaanalyzer.model;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Instantiates a new event.
  */
-@Data
+@Getter
+@Setter
 public class Event {
-    private String event_name;
-    private String event_id;
+    @JsonProperty("event_name")
+    private String eventName;
+
+    @JsonProperty("event_id")
+    private String eventId;
+
+    @JsonProperty("time")
     private Long time;
-    private String event_url;
+
+    @JsonProperty("event_url")
+    private String eventUrl;
 }

@@ -6,7 +6,6 @@ import org.apache.kafka.common.header.Headers;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -29,6 +28,7 @@ public class CustomMeetupRSVPDeserializer implements Deserializer<MeetupRSVP> {
 	 */
 	@Override
 	public void configure(Map configs, boolean isKey) {
+		// No overriding required
 	}
 
 	/**
@@ -68,5 +68,6 @@ public class CustomMeetupRSVPDeserializer implements Deserializer<MeetupRSVP> {
 	 */
 	@Override
 	public void close() {
+		// No overriding required
 	}
 }

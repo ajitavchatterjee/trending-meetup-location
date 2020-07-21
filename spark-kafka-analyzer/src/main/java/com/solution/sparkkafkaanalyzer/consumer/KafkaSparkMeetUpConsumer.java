@@ -71,20 +71,21 @@ public class KafkaSparkMeetUpConsumer {
 		final JavaDStream<MeetupRSVP> meetupStreamValues = meetupStream.map(ConsumerRecord::value);
 
 		updateVenueFrequency(meetupStreamValues);
-		// some time later, after outputs have completed
 		commitOffsetToKafkaTopic(meetupStream);
-		context.start();
 		try {
+			context.start();
 			context.awaitTermination();
 		} catch (InterruptedException e) {
-			logger.error("Error occurred while closing the Spark JavaStreamingContext");
+			logger.error("Execution of JavaStreaming Context stopped unexpectedly due to {}", e.getMessage());
+			context.ssc().sc().cancelAllJobs();
+			context.stop(true, true);
 		}
 	}
 
 	/**
 	 * Creates the stream.
 	 *
-	 * @return the java input D stream
+	 * @return the java input Dstream
 	 */
 	private JavaInputDStream<ConsumerRecord<String, MeetupRSVP>> createStream() {
 		logger.debug("Direct stream is created on the topic :: {}", fetchKafkaTopics());
@@ -143,8 +144,8 @@ public class KafkaSparkMeetUpConsumer {
 	 * @return the venue frequency
 	 */
 	private VenueFrequency buildVenueFrequency(Map.Entry<Venue, Integer> entry) {
-		return VenueFrequency.builder().venue_id(entry.getKey().getVenue_id())
-				.venue_name(entry.getKey().getVenue_name()).lat(entry.getKey().getLat()).lon(entry.getKey().getLon())
+		return VenueFrequency.builder().venueId(entry.getKey().getVenueId())
+				.venueName(entry.getKey().getVenueName()).lat(entry.getKey().getLat()).lon(entry.getKey().getLon())
 				.count(entry.getValue()).build();
 	}
 

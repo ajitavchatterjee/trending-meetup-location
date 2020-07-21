@@ -7,3 +7,14 @@ cassandra:
   keyspace-name: rsvp
   base-packages: com.solution.meetupreactiveservice
   local-data-center: datacenter1
+  
+---
+ 
+spring:
+    profiles: test
+cassandra:
+  contact-points: 127.0.0.1
+  port: 9042
+  keyspace-name: rsvp_test
+  base-packages: com.solution.meetupreactiveservice
+  local-data-center: datacenter1

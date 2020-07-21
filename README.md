@@ -7,16 +7,16 @@ This application has backend and fronend implementation which can retrieve, proc
 	* Send it continuously to a Kafka topic (meetuprsvp) so that the data can be processed as streams using Apache Spark.
 	
 2. **spark-kafka-analyzer:** It is a Springboot application and serves the following purposes.
-	* Reads the message from the same Kafka topic (meetuprsvp) and processes it to find the venue count as streams of batches using Apache Spark.
-	* Updates the venue details along-with the calculated count in the cassandra database (keyspace(rsvp) & table(meetupfrequenncy)) and if the venue is already present, it just updates the count.
+	* Reads the message from the same Kafka topic (meetuprsvp) and processes it as streams of batches using Apache Spark to find the venue count.
+	* Increment the venue count with the calculated count in the cassandra database (keyspace: rsvp & table: venuefrequency) and if the venue is new, it simply just creates a new entry in the table.
 	
-3. **meetup-reactive-service:** It is reactive Spring boot application and serves the following purposes:
-	* It used the Cassandra DB reactive driver to produce flux data from the same Cassandra keyspace (rsvp) and table (meetupfrequenncy).
-	* It will expose the analyzed Venue Frequency as a rest end point (/meetupVenues).
+3. **meetup-reactive-service:** It is a reactive Spring boot application and serves the following purposes:
+	* It uses the Cassandra DB reactive driver to produce flux data from the same Cassandra table (venuefrequency) inside keyspace (rsvp).
+	* It will expose the analyzed Venue Frequency data as a REST endpoint (/meetupVenues).
 	
 4. **meetup-map:** This is an Angular application which shows the heatmap. It has following features:
 	* It uses AGM (Angular Google maps) libarary to show the heatmap coordinates along-with weight.
-	* It uses a Server side event (SSE) support to the above endpoint (/meetupVenues) and plots the heatmap overlay.
+	* It uses a Server side event (SSE) support to call the above endpoint (/meetupVenues) and plots the heatmap overlay.
 
 ### Technical Requirements
 For building and running the application you need.
@@ -40,12 +40,14 @@ For building and running the application you need.
 1. **Kafka setup:**
 
 	Start Zookeeper and Kafka Broker server. Although, default configuration is already present, make use you update the configurations in applications to connect this instance.
+	
 	Create a topic named ‘meetuprsvp’ on your kafka cluster.
+	
 	kafka-topics.bat(or, /sh for linux) --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic meetuprsvp
 	
 2. **Cassandra setup:**
 
-	Make sure Cassandra instance is running in your machine. Create the keyspace named ‘rsvp’ and then, create table named ‘meetupfrequenncy’ within that keyspace.
+	Make sure Cassandra instance is running in your machine. Create the keyspace named ‘rsvp’ and then, create table named ‘venuefrequency’ within that keyspace.
 	
 	CREATE KEYSPACE IF NOT EXISTS rsvp
 		WITH REPLICATION = {
@@ -55,13 +57,13 @@ For building and running the application you need.
 	
 	USE rsvp;
 
-	CREATE TABLE meetupfrequenncy (
-		venue_id int, 
-		venue_name text, 
+	CREATE TABLE venuefrequency (
+		venueId int, 
+		venueName text, 
 		lat double, 
 		lon double, 
 		count counter,
-		PRIMARY KEY ((venue_id, venue_name), lat, lon)
+		PRIMARY KEY ((venueId, venueName), lat, lon)
 	);
 	
 3. **Google Maps seup:**
@@ -75,7 +77,7 @@ For building and running the application you need.
 	
 
 ### Steps to run backend applications: collection-kafka, spark-kafka-analyzer & meetup-reactive-service:
-1.  Verify required configuration for kafka/Cassandra in application.yml.
+1.  Verify required configuration for kafka/Cassandra/server port in application.yml.
 
 2.	Run maven command to install dependency.
 	
