@@ -1,5 +1,4 @@
-import { Injectable, NgZone  } from '@angular/core';
-import { Observable } from "rxjs";
+import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 type OnMessageCallback = (data: MessageEvent['data']) => void

@@ -4,8 +4,6 @@ import { VenueFrequency } from './model/VenueFrequency';
 import { Subscription, interval } from 'rxjs';
 import { VenueCoordItem } from './model/VenueCoordItem';
 
-// declare var google: any;
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -18,8 +16,9 @@ export class AppComponent implements OnDestroy {
   private map: google.maps.Map;
   private heatmap: any;
   private coords = [];
-  mySub: Subscription;
+  private mySub: Subscription;
   private venueCoordMap = new Map();
+  private reloadInterval: number = 30000
 
   onMapLoad(mapInstance: google.maps.Map) {
     this.map = mapInstance;
@@ -32,7 +31,7 @@ export class AppComponent implements OnDestroy {
 
     this.sseService.getMeetUpData (this.onMessageSuccess.bind(this));
 
-    this.mySub = interval(30000).subscribe((func => {
+    this.mySub = interval(this.reloadInterval).subscribe((func => {
       this.updateCoordArray(this.venueCoordMap);
       if(this.coords.length > 0) {
         this.heatmap.setData(this.coords);
@@ -59,16 +58,16 @@ updateVenueCoordMap(venueFrequency: VenueFrequency) {
 updateCoordArray(venueCoordMap: Map<number,VenueCoordItem>) {
   this.coords.splice(0,this.coords.length);
   venueCoordMap.forEach((value: VenueCoordItem, _) => {
-    this.coords.push({location: (this.formatLatLng(value.lat, value.lon)), weight: value.weight})
-});
+    this.coords.push(this.formatToHeatMapData(value))
+  });
 }
 
-formatToHeatMapData(venueFrequency: VenueFrequency) {
+formatToHeatMapData(venueCoordItem: VenueCoordItem) {
   return {
     location: this.formatLatLng(
-      venueFrequency.venueFrequencyKey.lat, 
-      venueFrequency.venueFrequencyKey.lon), 
-    weight: venueFrequency.count
+      venueCoordItem.lat, 
+      venueCoordItem.lon), 
+    weight: venueCoordItem.weight
   };
 }
 
