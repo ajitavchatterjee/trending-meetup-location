@@ -19,9 +19,9 @@ This application has backend and fronend implementation which can retrieve, proc
 	* It uses a Server side event (SSE) support to the above endpoint (/meetupVenues) and plots the heatmap overlay.
 
 ### Technical Requirements
-For building and running the application you need:
+For building and running the application you need.
 
-	**Backend**
+**Backend**
 1. JDK 1.8x
 2. Maven 3.x.x
 3. Tomcat 9.x (if not using integrated tomcat)
@@ -29,7 +29,8 @@ For building and running the application you need:
 5. Apache Cassandra 3.xx.xx
 6. Apache Spark 3.x.x
 
-	**Frontend**
+
+**Frontend**
 1. Node version v10.16.0
 2. npm version 6.9.0
 3. Angular CLI version 8.3.5
