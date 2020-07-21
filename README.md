@@ -21,12 +21,18 @@ This application has backend and fronend implementation which can retrieve, proc
 ### Technical Requirements
 For building and running the application you need:
 
+	**Backend**
 1. JDK 1.8x
 2. Maven 3.x.x
 3. Tomcat 9.x (if not using integrated tomcat)
 4. Kafka setup & running (Single node)
 5. Apache Cassandra 3.xx.xx
 6. Apache Spark 3.x.x
+
+	**Frontend**
+1. Node version v10.16.0
+2. npm version 6.9.0
+3. Angular CLI version 8.3.5
 
 ### Prerequisites
 
@@ -57,8 +63,17 @@ For building and running the application you need:
 		PRIMARY KEY ((venue_id, venue_name), lat, lon)
 	);
 	
+3. **Google Maps seup:**
 
-### Steps to run collection-kafka, spark-kafka-analyzer & meetup-reactive-service:
+	Go to the google maps console of your account and generate a non-restricted API key.
+	Follow the link for the steps:
+	https://developers.google.com/maps/documentation/javascript/get-api-key
+	
+	Now, go to the Angular frontend application and set the value ‘googleMapsAPIKey’ under environments with the generated API key.
+	Path: trending-meetup-location -> meetup-map -> src -> environments -> environment.ts
+	
+
+### Steps to run backend applications: collection-kafka, spark-kafka-analyzer & meetup-reactive-service:
 1.  Verify required configuration for kafka/Cassandra in application.yml.
 
 2.	Run maven command to install dependency.
@@ -68,6 +83,21 @@ For building and running the application you need:
 3.	Compile and run the project.
 
 	mvn spring-boot:run
+	
+	
+### Steps to run fronend application: meetup-map:
+
+1. Open command prompt, navigate to application folder and run below command to install all the dependencies
+
+    npm install
+
+2. Run the below command to start the application
+
+    ng serve -o
+
+3. After the server starts, the application will get open in below URL in browser to show the heatmap:
+
+    http://localhost:4200
 	
 ## Code Analysis
 SonarQube has been used as static code analyzer for code analysis (i.e. for bugs/vulnerabilities/Code smells).
