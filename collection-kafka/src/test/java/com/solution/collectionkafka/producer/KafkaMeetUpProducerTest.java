@@ -14,26 +14,34 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+/**
+ * The Class KafkaMeetUpProducerTest is responsible to test if the used kafka
+ * producer works or not.
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@ActiveProfiles(value="test")
+@ActiveProfiles(value = "test")
 public class KafkaMeetUpProducerTest {
 
-    @Autowired
-    private KafkaMeetUpProducer producer;
+	@Autowired
+	private KafkaMeetUpProducer producer;
 
-    @Autowired
-    private MessageCollector messageCollector;
+	@Autowired
+	private MessageCollector messageCollector;
 
-    @Rule
-    public ExpectedException exceptionRule = ExpectedException.none();
+	@Rule
+	public ExpectedException exceptionRule = ExpectedException.none();
 
-    @Test
-    public void test_sendMessageToKafka_usingSource_someData() {
-        Message<String> message = new GenericMessage<>("Stream data");
-        producer.getSource().output().send(MessageBuilder.withPayload(message).build());
-        Message<String> received = (Message<String>) messageCollector.forChannel(producer.getSource().output()).poll();
-        Assert.assertNotNull(received);
-    }
+	/**
+	 * Test send message to kafka using source dummy data.
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void test_sendMessageToKafka_usingSource_someData() {
+		Message<String> message = new GenericMessage<>("Stream data");
+		producer.getSource().output().send(MessageBuilder.withPayload(message).build());
+		Message<String> received = (Message<String>) messageCollector.forChannel(producer.getSource().output()).poll();
+		Assert.assertNotNull(received);
+	}
 
 }

@@ -18,45 +18,58 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 
+/**
+ * The Class KafkaMeetUpProducerUnitTest tests all the loggers that are supposed
+ * to be shown.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class KafkaMeetUpProducerUnitTest {
 
-    private KafkaMeetUpProducer kafkaMeetUpProducer;
-    private static LogMemoryAppender logMemoryAppender;
+	private KafkaMeetUpProducer kafkaMeetUpProducer;
 
-    @Mock
-    private ConnectionConfig config;
+	private static LogMemoryAppender logMemoryAppender;
 
-    @Before
-    public void setup() {
-        kafkaMeetUpProducer = new KafkaMeetUpProducer(config, () -> (message, timeout) -> true);
-        Logger logger = (Logger) LoggerFactory.getLogger(TestUtils.LOGGER_NAME);
-        logMemoryAppender = new LogMemoryAppender();
-        logMemoryAppender.setContext((LoggerContext) LoggerFactory.getILoggerFactory());
-        logger.setLevel(Level.DEBUG);
-        logger.addAppender(logMemoryAppender);
-        logMemoryAppender.start();
-    }
+	@Mock
+	private ConnectionConfig config;
 
-    @After
-    public void cleanUp() {
-        logMemoryAppender.reset();
-        logMemoryAppender.stop();
-    }
+	@Before
+	public void setup() {
+		kafkaMeetUpProducer = new KafkaMeetUpProducer(config, () -> (message, timeout) -> true);
+		Logger logger = (Logger) LoggerFactory.getLogger(TestUtils.LOGGER_NAME);
+		logMemoryAppender = new LogMemoryAppender();
+		logMemoryAppender.setContext((LoggerContext) LoggerFactory.getILoggerFactory());
+		logger.setLevel(Level.DEBUG);
+		logger.addAppender(logMemoryAppender);
+		logMemoryAppender.start();
+	}
 
-    @Test
-    public void test_readRSVPMeetupJson_IncorrectUrl() {
-        Mockito.when(config.getUrl()).thenReturn(null);
-        kafkaMeetUpProducer.readRSVPMeetupJson();
-        assertThat(logMemoryAppender.countEventsForLogger(TestUtils.LOGGER_NAME)).isEqualTo(1);
-        assertThat(logMemoryAppender.search(LoggerMessageUtils.ERROR_INCORRECT_URL_MSG, Level.ERROR).size()).isEqualTo(1);
-    }
+	@After
+	public void cleanUp() {
+		logMemoryAppender.reset();
+		logMemoryAppender.stop();
+	}
 
-    @Test
-    public void test_readRSVPMeetupJson_success_logger() {
-        Mockito.when(config.getUrl()).thenReturn(TestUtils.DUMMY_URL);
-        kafkaMeetUpProducer.readRSVPMeetupJson();
-        assertThat(logMemoryAppender.search(LoggerMessageUtils.CONNECTION_SUCCESS_STATUS_MSG, Level.DEBUG).size()).isEqualTo(1);
-        assertThat(logMemoryAppender.search(LoggerMessageUtils.INCOMING_JSON_MSG, Level.DEBUG).size()).isGreaterThan(0);
-    }
+	/**
+	 * Test read RSVP meetup json incorrect url.
+	 */
+	@Test
+	public void test_readRSVPMeetupJson_IncorrectUrl() {
+		Mockito.when(config.getUrl()).thenReturn(null);
+		kafkaMeetUpProducer.readRSVPMeetupJson();
+		assertThat(logMemoryAppender.countEventsForLogger(TestUtils.LOGGER_NAME)).isEqualTo(1);
+		assertThat(logMemoryAppender.search(LoggerMessageUtils.ERROR_INCORRECT_URL_MSG, Level.ERROR).size())
+				.isEqualTo(1);
+	}
+
+	/**
+	 * Test read RSVP meetup json success logger.
+	 */
+	@Test
+	public void test_readRSVPMeetupJson_success_logger() {
+		Mockito.when(config.getUrl()).thenReturn(TestUtils.DUMMY_URL);
+		kafkaMeetUpProducer.readRSVPMeetupJson();
+		assertThat(logMemoryAppender.search(LoggerMessageUtils.CONNECTION_SUCCESS_STATUS_MSG, Level.DEBUG).size())
+				.isEqualTo(1);
+		assertThat(logMemoryAppender.search(LoggerMessageUtils.INCOMING_JSON_MSG, Level.DEBUG).size()).isGreaterThan(0);
+	}
 }

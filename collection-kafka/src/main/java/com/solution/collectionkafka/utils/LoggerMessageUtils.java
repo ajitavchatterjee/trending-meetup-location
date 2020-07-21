@@ -1,5 +1,9 @@
 package com.solution.collectionkafka.utils;
 
+/**
+ * The Class LoggerMessageUtils has all the messages to be shown during
+ * sending the message or for any error occurred.
+ */
 public class LoggerMessageUtils {
 
     private LoggerMessageUtils(){}
