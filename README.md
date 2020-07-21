@@ -101,6 +101,12 @@ For building and running the application you need.
 3. After the server starts, the application will get open in below URL in browser to show the heatmap:
 
     http://localhost:4200
+    
+
+### Screenshot of heatmap
+![image](https://user-images.githubusercontent.com/45230142/88069926-62a65680-cb72-11ea-9b42-3fd81cad3311.png)
+
+
 	
 ## Code Analysis
 SonarQube has been used as static code analyzer for code analysis (i.e. for bugs/vulnerabilities/Code smells).
