@@ -4,8 +4,12 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Instantiates a new group.
+ */
 @Data
 public class Group {
+    
     private List<GroupTopic> group_topics = null;
     private String group_city;
     private String group_country;

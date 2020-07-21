@@ -6,14 +6,18 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * The ConsumerRunnerConfig is responsible to invoke the consumer of spark
+ * streaming using kafka.
+ */
 @Configuration
 @AllArgsConstructor
 public class ConsumerRunnerConfig {
 
-    private final KafkaSparkMeetUpConsumer kafkaSparkMeetUpConsumer;
+	private final KafkaSparkMeetUpConsumer kafkaSparkMeetUpConsumer;
 
-    @Bean
-    public ApplicationRunner loadMessage(){
-        return args -> kafkaSparkMeetUpConsumer.getMeetUpData();
-    }
+	@Bean
+	public ApplicationRunner invokeConsumer() {
+		return args -> kafkaSparkMeetUpConsumer.getMeetUpData();
+	}
 }

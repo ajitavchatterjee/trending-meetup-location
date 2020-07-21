@@ -14,26 +14,47 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Arrays;
 import java.util.Collections;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The SparkConfig is responsible to create the JavaSteaming context to start
+ * the batch processing from kafka topic.
+ */
 @Configuration
+
+/**
+ * Instantiates a new spark config.
+ *
+ * @param sparkPropertiesConfig the spark properties config
+ */
 @AllArgsConstructor
 public class SparkConfig {
 
-    private final SparkPropertiesConfig sparkPropertiesConfig;
+	/** The spark properties config. */
+	private final SparkPropertiesConfig sparkPropertiesConfig;
 
-    @Bean
-    public SparkConf conf() {
-        return new SparkConf()
-            .setAppName(sparkPropertiesConfig.getAppName())
-            .setMaster(sparkPropertiesConfig.getMaster())
-            .set(sparkPropertiesConfig.getDbIpType(), sparkPropertiesConfig.getDbIp())
-            .set(sparkPropertiesConfig.getPortType(), sparkPropertiesConfig.getPort())
-            .set("spark.serializer","org.apache.spark.serializer.KryoSerialize")
-            .set("spark.sql.caseSensitive", sparkPropertiesConfig.getCaseSensitive())
-            .registerKryoClasses(new Class<?>[]{ ConsumerRecord.class });
-    }
+	/**
+	 * Configures the Spark
+	 *
+	 * @return the spark conf instance
+	 */
+	@Bean
+	public SparkConf conf() {
+		return new SparkConf().setAppName(sparkPropertiesConfig.getAppName())
+				.setMaster(sparkPropertiesConfig.getMaster())
+				.set(sparkPropertiesConfig.getDbIpType(), sparkPropertiesConfig.getDbIp())
+				.set(sparkPropertiesConfig.getPortType(), sparkPropertiesConfig.getPort())
+				.set("spark.serializer", "org.apache.spark.serializer.KryoSerialize")
+				.set("spark.sql.caseSensitive", sparkPropertiesConfig.getCaseSensitive())
+				.registerKryoClasses(new Class<?>[] { ConsumerRecord.class });
+	}
 
-    @Bean
-    public JavaStreamingContext createJavaStreamingContext() {
-        return new JavaStreamingContext(conf(), Durations.seconds(1));
-    }
+	/**
+	 * Creates the java streaming context.
+	 *
+	 * @return the java streaming context
+	 */
+	@Bean
+	public JavaStreamingContext createJavaStreamingContext() {
+		return new JavaStreamingContext(conf(), Durations.seconds(1));
+	}
 }

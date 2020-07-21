@@ -12,30 +12,61 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Map;
 
+/**
+ * The Class CustomMeetupRSVPDeserializer is the custom deserializer while
+ * consuming the CustomerRecords from the kafka topic.
+ */
 @Component
 public class CustomMeetupRSVPDeserializer implements Deserializer<MeetupRSVP> {
-    private static final Logger logger = LoggerFactory.getLogger(CustomMeetupRSVPDeserializer.class);
 
-    @Override
-    public void configure(Map configs, boolean isKey) { }
+	private static final Logger logger = LoggerFactory.getLogger(CustomMeetupRSVPDeserializer.class);
 
-    @Override
-    public MeetupRSVP deserialize(String s, byte[] bytes) {
-        return null;
-    }
+	/**
+	 * Configure.
+	 *
+	 * @param configs the configs
+	 * @param isKey   the is key
+	 */
+	@Override
+	public void configure(Map configs, boolean isKey) {
+	}
 
-    @Override
-    public MeetupRSVP deserialize(String topic, Headers headers, byte[] data) {
-        ObjectMapper mapper = new ObjectMapper();
-        MeetupRSVP mRSVP = null;
-        try {
-            mRSVP = mapper.readValue(data, MeetupRSVP.class);
-        } catch (IOException e) {
-            logger.error("Some issue occurred while deserializing the MeetupRSVP data: {}", data);
-        }
-        return mRSVP;
-    }
+	/**
+	 * Deserialize.
+	 *
+	 * @param s     the s
+	 * @param bytes the bytes
+	 * @return the meetup RSVP
+	 */
+	@Override
+	public MeetupRSVP deserialize(String s, byte[] bytes) {
+		return null;
+	}
 
-    @Override
-    public void close() { }
+	/**
+	 * Deserialize.
+	 *
+	 * @param topic   the topic
+	 * @param headers the headers
+	 * @param data    the data
+	 * @return the meetup RSVP
+	 */
+	@Override
+	public MeetupRSVP deserialize(String topic, Headers headers, byte[] data) {
+		ObjectMapper mapper = new ObjectMapper();
+		MeetupRSVP mRSVP = null;
+		try {
+			mRSVP = mapper.readValue(data, MeetupRSVP.class);
+		} catch (IOException e) {
+			logger.error("Some issue occurred while deserializing the MeetupRSVP data: {}", data);
+		}
+		return mRSVP;
+	}
+
+	/**
+	 * Close.
+	 */
+	@Override
+	public void close() {
+	}
 }
