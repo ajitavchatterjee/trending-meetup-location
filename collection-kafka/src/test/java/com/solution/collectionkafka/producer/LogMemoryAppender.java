@@ -25,13 +25,13 @@ public class LogMemoryAppender extends ListAppender<ILoggingEvent> {
 	/**
 	 * Contains.
 	 *
-	 * @param string the string
+	 * @param message the string
 	 * @param level  the level
 	 * @return true, if successful
 	 */
-	public boolean contains(String string, Level level) {
+	public boolean contains(String message, Level level) {
 		return this.list.stream()
-				.anyMatch(event -> event.getMessage().toString().contains(string) && event.getLevel().equals(level));
+				.anyMatch(event -> event.getMessage().toString().contains(message) && event.getLevel().equals(level));
 	}
 
 	/**
@@ -47,30 +47,24 @@ public class LogMemoryAppender extends ListAppender<ILoggingEvent> {
 	/**
 	 * Search.
 	 *
-	 * @param string the string
+	 * @param message the string
 	 * @return the list
 	 */
-	public List<ILoggingEvent> search(String string) {
-		return this.list.stream().filter(event -> event.getMessage().toString().contains(string))
+	public List<ILoggingEvent> search(String message) {
+		return this.list.stream().filter(event -> event.getMessage().toString().contains(message))
 				.collect(Collectors.toList());
 	}
 
 	/**
 	 * Search.
 	 *
-	 * @param string the string
+	 * @param message the string
 	 * @param level  the level
 	 * @return the list
 	 */
-	public List<ILoggingEvent> search(String string, Level level) {
-		String in = string;
-		this.list.stream().forEach(event -> {
-			String msg = event.getMessage();
-			boolean res = msg.contains(in);
-			Level found = event.getLevel();
-		});
-		return this.list.stream().filter(event -> event.getMessage().contains(string) && event.getLevel().equals(level))
-				.collect(Collectors.toList());
+	public List<ILoggingEvent> search(String message, Level level) {
+		return this.list.stream().filter(event -> event.getMessage().contains(message) && event.getLevel().equals(level))
+			.collect(Collectors.toList());
 	}
 
 	/**
