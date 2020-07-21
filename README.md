@@ -1,5 +1,5 @@
 # Trending Meetup locations
-This application has backend and fronend implementation which can retrieve, process and display the most popular meetup locations in the form of heatmap. It consists of 4 projects:
+This application has backend and frontend implementation which can retrieve, process and display the most popular meetup locations in the form of heatmap. It consists of 4 projects:
 
 1. **collection-kafka:** It is a Springboot application and has basically two purpose.
 	* Reads the live input stream from RSVP meetup.com. 
@@ -108,6 +108,13 @@ For building and running the application you need.
 ![image](https://user-images.githubusercontent.com/45230142/88069926-62a65680-cb72-11ea-9b42-3fd81cad3311.png)
 
 
+### Scope of improvement
+
+	* More integration testing needs to be done to cover multiple scenarious including edge cases.
+	* Security aspects needs to be improved like Kafka supports SSL communication and securing REST API endpoint.
+	* Containerization can be done using docker.
+	* Database can be improved to store the trending topics based on country. This information can be used to show the trending topics on the google maps using POI click event. 
+	* Application can be improved to show the trending topics over the 'period of time' like last 7 days, 1 month. 
 	
 ## Code Analysis
 SonarQube has been used as static code analyzer for code analysis (i.e. for bugs/vulnerabilities/Code smells).
