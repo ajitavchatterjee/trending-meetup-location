@@ -66,7 +66,7 @@ For building and running the application you need.
 		PRIMARY KEY ((venue_id, venue_name), lat, lon)
 	);
 	
-3. **Google Maps seup:**
+3. **Google Maps setup:**
 
 	Go to the google maps console of your account and generate a non-restricted API key.
 	Follow the link for the steps:
