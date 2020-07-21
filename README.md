@@ -108,8 +108,7 @@ For building and running the application you need.
 ![image](https://user-images.githubusercontent.com/45230142/88069926-62a65680-cb72-11ea-9b42-3fd81cad3311.png)
 
 
-### Scope of improvement:
-
+### Scope of improvements:
 
 	* More integration testing needs to be done to cover multiple scenarious including edge cases.
 	* Security aspects needs to be improved like Kafka supports SSL communication and securing REST API endpoint.
