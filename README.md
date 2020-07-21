@@ -104,6 +104,7 @@ For building and running the application you need.
     
 
 ### Screenshot of heatmap
+
 ![image](https://user-images.githubusercontent.com/45230142/88069926-62a65680-cb72-11ea-9b42-3fd81cad3311.png)
 
 
