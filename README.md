@@ -39,7 +39,7 @@ For building and running the application you need.
 
 1. **Kafka setup:**
 
-	Start Zookeeper and Kafka Broker server. Although, default configuration is already present, make use you update the configurations in applications to connect this instance.
+	Start Zookeeper and Kafka Broker server. Although, default configuration is already present, make sure you update the configurations in applications to connect this instance.
 	
 	Create a topic named ‘meetuprsvp’ on your kafka cluster.
 
