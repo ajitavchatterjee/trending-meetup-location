@@ -42,7 +42,7 @@ For building and running the application you need.
 	Start Zookeeper and Kafka Broker server. Although, default configuration is already present, make use you update the configurations in applications to connect this instance.
 	
 	Create a topic named ‘meetuprsvp’ on your kafka cluster.
-	
+
 	kafka-topics.bat(or, /sh for linux) --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic meetuprsvp
 	
 2. **Cassandra setup:**
