@@ -1,19 +1,20 @@
-# Assessment: Trending Meetup locations
-This project consists of 4 parts:
-1. collection-kafka: It is a Springboot application and has basically two purpose.
+# Trending Meetup locations
+This application has backend and fronend implementation which can retrieve, process and display the most popular meetup locations in the form of heatmap. It consists of 4 projects:
+
+1. **collection-kafka:** It is a Springboot application and has basically two purpose.
 	* Reads the live input stream from RSVP meetup.com. 
 	https://stream.meetup.com/2/rsvps
 	* Send it continuously to a Kafka topic (meetuprsvp) so that the data can be processed as streams using Apache Spark.
 	
-2. spark-kafka-analyzer: It is a Springboot application and serves the following purposes.
+2. **spark-kafka-analyzer:** It is a Springboot application and serves the following purposes.
 	* Reads the message from the same Kafka topic (meetuprsvp) and processes it to find the venue count as streams of batches using Apache Spark.
 	* Updates the venue details along-with the calculated count in the cassandra database (keyspace(rsvp) & table(meetupfrequenncy)) and if the venue is already present, it just updates the count.
 	
-3. meetup-reactive-service: It is reactive Spring boot application and serves the following purposes:
+3. **meetup-reactive-service:** It is reactive Spring boot application and serves the following purposes:
 	* It used the Cassandra DB reactive driver to produce flux data from the same Cassandra keyspace (rsvp) and table (meetupfrequenncy).
 	* It will expose the analyzed Venue Frequency as a rest end point (/meetupVenues).
 	
-4. meetup-map: This is an Angular application which shows the heatmap. It has following features:
+4. **meetup-map:** This is an Angular application which shows the heatmap. It has following features:
 	* It uses AGM (Angular Google maps) libarary to show the heatmap coordinates along-with weight.
 	* It uses a Server side event (SSE) support to the above endpoint (/meetupVenues) and plots the heatmap overlay.
 
@@ -29,12 +30,14 @@ For building and running the application you need:
 
 ### Prerequisites
 
-1. _Kafka setup_
+1. **Kafka setup:**
+
 	Start Zookeeper and Kafka Broker server. Although, default configuration is already present, make use you update the configurations in applications to connect this instance.
 	Create a topic named ‘meetuprsvp’ on your kafka cluster.
 	kafka-topics.bat(or, /sh for linux) --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic meetuprsvp
 	
-2. _Cassandra setup_
+2. **Cassandra setup:**
+
 	Make sure Cassandra instance is running in your machine. Create the keyspace named ‘rsvp’ and then, create table named ‘meetupfrequenncy’ within that keyspace.
 	
 	CREATE KEYSPACE IF NOT EXISTS rsvp
@@ -67,7 +70,7 @@ For building and running the application you need:
 	mvn spring-boot:run
 	
 ## Code Analysis
-SonarQube 7.9.1 has been used as static code analyzer for code analysis (i.e. for bugs/vulnerabilities/Code smells).
+SonarQube has been used as static code analyzer for code analysis (i.e. for bugs/vulnerabilities/Code smells).
 
 #### Developed by [Ajitav Chatterjee](https://github.com/ajitavchatterjee)
 
