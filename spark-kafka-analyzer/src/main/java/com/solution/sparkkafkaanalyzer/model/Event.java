@@ -1,6 +1,5 @@
 package com.solution.sparkkafkaanalyzer.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,15 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Event {
-    @JsonProperty("event_name")
-    private String eventName;
-
-    @JsonProperty("event_id")
-    private String eventId;
-
-    @JsonProperty("time")
+    private String event_name;
+    private String event_id;
     private Long time;
-
-    @JsonProperty("event_url")
-    private String eventUrl;
+    private String event_url;
 }

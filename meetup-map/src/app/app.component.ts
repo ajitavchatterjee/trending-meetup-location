@@ -46,7 +46,7 @@ onMessageSuccess(data: MessageEvent['data']) {
 
 updateVenueCoordMap(venueFrequency: VenueFrequency) {
   this.venueCoordMap.set(
-    venueFrequency.venueFrequencyKey.venue_id, 
+    venueFrequency.venueFrequencyKey.venueId, 
     new VenueCoordItem(
       venueFrequency.venueFrequencyKey.lat, 
       venueFrequency.venueFrequencyKey.lon, 

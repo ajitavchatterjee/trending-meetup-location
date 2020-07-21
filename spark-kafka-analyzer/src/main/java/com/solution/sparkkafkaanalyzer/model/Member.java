@@ -1,7 +1,6 @@
 package com.solution.sparkkafkaanalyzer.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,16 +10,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Member {
-    @JsonProperty("member_id")
-    private Integer memberId;
 
-    @JsonProperty("photo")
+    private Integer member_id;
     private String photo;
-
-    @JsonProperty("member_name")
-    private String memberName;
-
-    @JsonProperty("other_services")
+    private String member_name;
     @JsonIgnore
-    private String otherServices;
+    private String other_services;
 }

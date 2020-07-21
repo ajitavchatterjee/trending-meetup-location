@@ -10,15 +10,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Venue {
-    @JsonProperty("venue_name")
-    private String venueName;
-
-    @JsonProperty("lon")
+    private String venue_name;
     private Double lon;
-
-    @JsonProperty("lat")
     private Double lat;
-
-    @JsonProperty("venue_id")
-    private Integer venueId;
+    private Integer venue_id;
 }

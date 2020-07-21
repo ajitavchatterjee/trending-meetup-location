@@ -12,8 +12,8 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class VenueFrequency {
-	private int venueId;
-	private String venueName;
+	private int venue_id;
+	private String venue_name;
 	private double lat;
 	private double lon;
 	private int count;

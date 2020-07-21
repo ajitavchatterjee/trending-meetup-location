@@ -57,13 +57,13 @@ For building and running the application you need.
 	
 	USE rsvp;
 
-	CREATE TABLE venuefrequency (
-		venueId int, 
-		venueName text, 
+	CREATE TABLE IF NOT EXISTS venuefrequency (
+		venue_id int, 
+		venue_name text, 
 		lat double, 
 		lon double, 
 		count counter,
-		PRIMARY KEY ((venueId, venueName), lat, lon)
+		PRIMARY KEY ((venue_id, venue_name), lat, lon)
 	);
 	
 3. **Google Maps seup:**

@@ -144,8 +144,8 @@ public class KafkaSparkMeetUpConsumer {
 	 * @return the venue frequency
 	 */
 	private VenueFrequency buildVenueFrequency(Map.Entry<Venue, Integer> entry) {
-		return VenueFrequency.builder().venueId(entry.getKey().getVenueId())
-				.venueName(entry.getKey().getVenueName()).lat(entry.getKey().getLat()).lon(entry.getKey().getLon())
+		return VenueFrequency.builder().venue_id(entry.getKey().getVenue_id())
+				.venue_name(entry.getKey().getVenue_name()).lat(entry.getKey().getLat()).lon(entry.getKey().getLon())
 				.count(entry.getValue()).build();
 	}
 

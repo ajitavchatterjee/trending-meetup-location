@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   googleMapsAPIKey: 'AIzaSyDT9yunc9DzC8EPkAGBOuGI4HJMLaiv5jU',
-  meetUpFrequencyUrl: 'http://localhost:8080/meetupRsvps'
+  meetUpFrequencyUrl: 'http://localhost:8080/meetupVenues'
 };
 
 /*

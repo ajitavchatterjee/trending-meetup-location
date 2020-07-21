@@ -1,6 +1,5 @@
 package com.solution.sparkkafkaanalyzer.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,9 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GroupTopic {
-    @JsonProperty("urlkey")
-    private String urlKey;
 
-    @JsonProperty("topic_name")
-    private String topicName;
+    private String urlkey;
+    private String topic_name;
 }
